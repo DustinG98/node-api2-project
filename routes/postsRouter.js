@@ -45,5 +45,33 @@ router.route('/:id/comments').post((req, res) => {
         })
 })
 
+//GET POSTS
+router.route('/').get((req, res) => {
+    database.find()
+        .then(posts => {
+            res.status(200).json(posts)
+        })
+        .catch(err => {
+            res.status(500).json({ error: "The posts information could not be retrieved." })
+        })
+})
+
+//GET SINGLE POST
+router.route('/:id').get((req, res) => {
+    database.findById(req.params.id)
+        .then(post => {
+            if(post.length === 0) {
+                res.status(404).json({ message: "The post with the specified ID does not exist." })
+                return;
+            }
+            res.status(200).json(post[0])
+        })
+        .catch(() => {
+            res.status(500).json({ error: "The post information could not be retrieved" })
+        })
+})
+
+
+
 module.exports = router;
 
